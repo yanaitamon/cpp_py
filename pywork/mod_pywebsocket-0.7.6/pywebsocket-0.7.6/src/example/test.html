@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Sample Page</title>
+        <script type="text/javascript">
+
+        var socket;
+         
+        function init(){
+            socket = new WebSocket("ws://localhost:8800/calc");
+            socket.onopen = function(e){
+                alert("open websocket!");
+            }
+            socket.onmessage = function(e){
+                var p = document.getElementById("msg");
+                p.innerHTML = "送られたメッセージ：" + e.data;
+            }
+            socket.onerror = function(e){
+                alert("error!!");
+            }
+            socket.onclose = function(e){
+                alert("close websocket.");
+            }
+        }
+         
+        function action(){
+            var str = document.getElementById("text1").value;
+            socket.send(str);
+        }
+         
+        init();
+
+        </script>
+    </head>
+    <body>
+        <h1>サンプル</h1>
+        <p id="msg">message...</p>
+        <input type="text" id="text1">
+        <input type="button" onclick="action();" value="send">
+    </body>
+</html>
