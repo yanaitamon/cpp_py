@@ -1,0 +1,70 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "boostpytest", "boostpytest\boostpytest.vcproj", "{E9859706-6E4D-482C-9207-F2F2063021DE}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+	ProjectSection(ProjectDependencies) = postProject
+		{E145E4C4-F20C-46A4-8C7E-E6E47F4B23E1} = {E145E4C4-F20C-46A4-8C7E-E6E47F4B23E1}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TAPI", "..\..\..\..\CAM-TOOL\GAP22\CAM\Library\TAPI\TAPI.vcproj", "{E145E4C4-F20C-46A4-8C7E-E6E47F4B23E1}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "anotherone", "anotherone\anotherone.vcproj", "{59678387-80EF-4FFD-8FB9-6B34DD46CD7F}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+	ProjectSection(ProjectDependencies) = postProject
+		{E145E4C4-F20C-46A4-8C7E-E6E47F4B23E1} = {E145E4C4-F20C-46A4-8C7E-E6E47F4B23E1}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 1
+		SccProjectUniqueName0 = ..\\..\\..\\..\\CAM-TOOL\\GAP22\\CAM\\Library\\TAPI\\TAPI.vcproj
+		SccProjectName0 = \u0022$/TOOLS/CAM/Library/TAPI\u0022,\u0020VHKDAAAA
+		SccLocalPath0 = ..\\..\\..\\..\\CAM-TOOL\\GAP22\\CAM\\Library\\TAPI
+		SccProvider0 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
+		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E9859706-6E4D-482C-9207-F2F2063021DE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E9859706-6E4D-482C-9207-F2F2063021DE}.Debug|Win32.Build.0 = Debug|Win32
+		{E9859706-6E4D-482C-9207-F2F2063021DE}.Debug|x64.ActiveCfg = Debug|x64
+		{E9859706-6E4D-482C-9207-F2F2063021DE}.Debug|x64.Build.0 = Debug|x64
+		{E9859706-6E4D-482C-9207-F2F2063021DE}.Release|Win32.ActiveCfg = Release|Win32
+		{E9859706-6E4D-482C-9207-F2F2063021DE}.Release|Win32.Build.0 = Release|Win32
+		{E9859706-6E4D-482C-9207-F2F2063021DE}.Release|x64.ActiveCfg = Release|x64
+		{E9859706-6E4D-482C-9207-F2F2063021DE}.Release|x64.Build.0 = Release|x64
+		{E145E4C4-F20C-46A4-8C7E-E6E47F4B23E1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E145E4C4-F20C-46A4-8C7E-E6E47F4B23E1}.Debug|Win32.Build.0 = Debug|Win32
+		{E145E4C4-F20C-46A4-8C7E-E6E47F4B23E1}.Debug|x64.ActiveCfg = Debug|x64
+		{E145E4C4-F20C-46A4-8C7E-E6E47F4B23E1}.Debug|x64.Build.0 = Debug|x64
+		{E145E4C4-F20C-46A4-8C7E-E6E47F4B23E1}.Release|Win32.ActiveCfg = Release|Win32
+		{E145E4C4-F20C-46A4-8C7E-E6E47F4B23E1}.Release|Win32.Build.0 = Release|Win32
+		{E145E4C4-F20C-46A4-8C7E-E6E47F4B23E1}.Release|x64.ActiveCfg = Release|x64
+		{E145E4C4-F20C-46A4-8C7E-E6E47F4B23E1}.Release|x64.Build.0 = Release|x64
+		{59678387-80EF-4FFD-8FB9-6B34DD46CD7F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{59678387-80EF-4FFD-8FB9-6B34DD46CD7F}.Debug|Win32.Build.0 = Debug|Win32
+		{59678387-80EF-4FFD-8FB9-6B34DD46CD7F}.Debug|x64.ActiveCfg = Debug|x64
+		{59678387-80EF-4FFD-8FB9-6B34DD46CD7F}.Debug|x64.Build.0 = Debug|x64
+		{59678387-80EF-4FFD-8FB9-6B34DD46CD7F}.Release|Win32.ActiveCfg = Release|Win32
+		{59678387-80EF-4FFD-8FB9-6B34DD46CD7F}.Release|Win32.Build.0 = Release|Win32
+		{59678387-80EF-4FFD-8FB9-6B34DD46CD7F}.Release|x64.ActiveCfg = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
