@@ -98,7 +98,7 @@ public:
 #define DATA_SIZE 1024
 HANDLE hMapFile = (HANDLE)0xFFFFFFFF;
 LPVOID lpMem = NULL;
-static LPCTSTR MAP_FILENAME = _T("SharedMemory");
+static LPCTSTR MAP_FILENAME = _T("memory");
 
 //テスト用の共有データ型 
 typedef struct SharedData
@@ -496,6 +496,32 @@ int DoCommand( LPCTSTR lpszCmdLine, bool bIsHide /*= false*/ )
 class DlgCaller {
 protected:
 public:
+  // コンストラクタでメモリマップドファイルを作成する
+  DlgCaller()
+  {
+    // メモリマップドファイルの作成、確保
+    hMapFile = ::CreateFileMapping(
+                INVALID_HANDLE_VALUE,
+                NULL,
+                PAGE_READWRITE,
+                0,
+                DATA_SIZE,
+                MAP_FILENAME);
+
+    BOOL bExists = (GetLastError() == ERROR_ALREADY_EXISTS);
+    lpMem = ::MapViewOfFile(hMapFile, FILE_MAP_ALL_ACCESS, 0, 0, DATA_SIZE);
+    if (!bExists)
+        ZeroMemory(lpMem, DATA_SIZE);
+  };
+
+  // コンストラクタでメモリマップドファイルを破棄する
+  ~DlgCaller()
+  {
+    // メモリマップドファイルの解放
+    UnmapViewOfFile(lpMem);
+    CloseHandle(hMapFile);
+  }
+
   BOOL DoCalculation(std::wstring str, std::wstring str2,
     std::wstring str3, std::wstring str4, std::wstring str5)
   {
@@ -508,53 +534,30 @@ public:
     szCommandLine.Format( _T("C:\\Python27\\DLLs\\anotherone.exe \"%s\" \"%s\" \"%s\" \"%s\" \"%s\"")
                         , sz, sz2, sz3, sz4, sz5 );
 
-    //AfxMessageBox( szCommandLine, MB_OK );
-
     DoCommand( szCommandLine, true );
 
-    //MyDlg* d = new MyDlg();
-    //d->setModelPath(str);
-    //d->setProcName(str2);
-    //d->setOriginName(str3);
-    //d->setSheetPath(str4);
-    //d->DoModal();
-    //delete d;
-    //d = NULL;
     return TRUE;
   }
 
-  //void setModelPath( std::wstring str){ d.setModelPath(str); }
-  //void setProcName( std::wstring str){ d.setProcName(str); }
-  //void setOriginName( std::wstring str){ d.setOriginName(str); }
-  //void setSheetPath( std::wstring str){ d.setSheetPath(str); }
+  std::wstring getCalcStatus();
 };
 
 // ステータスを返す
-std::wstring getCalcStatus()
+std::wstring DlgCaller::getCalcStatus()
 {
   wstring retStr = L"failed.";
-
-  // メモリマップドファイルの作成、確保
-  hMapFile = ::CreateFileMapping(
-              INVALID_HANDLE_VALUE,
-              NULL,
-              PAGE_READWRITE,
-              0,
-              DATA_SIZE,
-              MAP_FILENAME);
-
-  BOOL bExists = (GetLastError() == ERROR_ALREADY_EXISTS);
-  lpMem = ::MapViewOfFile(hMapFile, FILE_MAP_ALL_ACCESS, 0, 0, DATA_SIZE);
-  if (!bExists)
-      ZeroMemory(lpMem, DATA_SIZE);
 
   SharedData* data = static_cast<SharedData*>(lpMem);
 
   if(NULL != data){
-
-    const unsigned int dataSize = data->m_strStatus.GetLength();
+    //const unsigned int dataSize = data->m_strStatus.GetLength();
+    const unsigned int dataSize = 256;
+    LPCTSTR str2;
+    if(NULL != &data->m_mylineNo){
+      str2 = data->m_mylineNo;
+    }
     char* buf = new char[dataSize+1];
-    strcpy( buf, data->m_strStatus );
+    strcpy( buf, str2 );
     wchar_t* wlocal = new wchar_t[dataSize+1];
 
     int ret = MultiByteToWideChar( CP_ACP, 
@@ -567,18 +570,6 @@ std::wstring getCalcStatus()
     retStr = wlocal;
     delete []buf;
     delete []wlocal;
-
-//MultiByteToWideChar
-//
-//std::wstring iso = L"iso";
-//CString ms = "ms";
-//
-//ms = iso.c_str();
-//iso = ms.GetString();
-
-    //LPCWSTR sss = (data->m_strStatus);
-    //std::wstring hi2( sss );
-    //retStr = hi2;
   }
 
   return retStr;
@@ -645,6 +636,7 @@ BOOST_PYTHON_MODULE( boostpytest )
 
   class_<DlgCaller>("DlgCaller")
     .def( "DoCalculation", &DlgCaller::DoCalculation )
+    .def( "getCalcStatus", &DlgCaller::getCalcStatus )
     //.def( "get", &DlgCaller::setModelPath )
     //.def( "get", &DlgCaller::setProcName )
     //.def( "get", &DlgCaller::setOriginName )

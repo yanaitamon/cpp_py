@@ -21,7 +21,8 @@
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="2"
+			UseOfMFC="2"
 			CharacterSet="2"
 			>
 			<Tool
@@ -42,6 +43,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="C:\Python27\include;&quot;C:\boost_1.50.0\include\boost-1_50&quot;;&quot;$(GAP22_CAM)\TAPI\Include&quot;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -60,6 +62,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				OutputFile="$(OutDir)\$(ProjectName).pyd"
+				AdditionalLibraryDirectories="C:\Python27\libs;C:\boost_1.50.0\lib;&quot;$(GAP22_CAM)\TAPI\$(IntDir)&quot;"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
 			/>
