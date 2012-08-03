@@ -5,3 +5,10 @@ PythonでWebからPythonライブラリにアクセスするところを試し�
 C++との連携部分はboost::pythonを用いた。
 クライアント側との非同期な通信をしたいのでpywebsocketも試している。
 
+現在、pywebsocket-0.7.6を使用中。
+---------------
+cd "～\pywebsocket-0.7.6\src"
+set PYTHONPATH=.
+python mod_pywebsocket/standalone.py -p 8800 -d example
+---------------
+で、ローカルホスト8800番で簡易サーバ起動。
