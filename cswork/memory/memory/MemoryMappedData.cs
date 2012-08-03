@@ -1,5 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
+using System.Text;
 
 namespace memory
 {
@@ -22,7 +24,8 @@ namespace memory
     {
       try
       {
-        m_memAreaHandle = CreateFileMapping((UIntPtr)0xFFFFFFFF,	// ファイルハンドル
+        m_memAreaHandle = CreateFileMapping(//(UIntPtr)0xFFFFFFFF,	// ファイルハンドル
+                                            (UIntPtr)INVALID_HANDLE_VALUE,
                                             IntPtr.Zero,          // セキュリティ属性
                                             0x04,                 // 保護属性(R/W)
                                             0,                    // サイズ上位
@@ -98,6 +101,12 @@ namespace memory
                                       | SECTION_MAP_EXECUTE
                                       | SECTION_EXTEND_SIZE);
     const UInt32 FILE_MAP_ALL_ACCESS = SECTION_ALL_ACCESS;
+
+#if _X64
+    const UInt64 INVALID_HANDLE_VALUE = 0xFFFFFFFFFFFFFFFF;  //((HANDLE)(LONG_PTR) - 1);
+#else
+    const UInt64 INVALID_HANDLE_VALUE = 0xFFFFFFFF;
+#endif
 
     // 共有メモリ制御用のAPIを.NET（C#）用にマーシャリングして再定義する
     [DllImport("kernel32.dll", SetLastError = true)]
