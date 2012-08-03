@@ -12,3 +12,5 @@ set PYTHONPATH=.
 python mod_pywebsocket/standalone.py -p 8800 -d example
 ---------------
 で、ローカルホスト8800番で簡易サーバ起動。
+
+console.html or console2.htmlを通してxxx_wsh.pyファイルの動きを確かめられる。
