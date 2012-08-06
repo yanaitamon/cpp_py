@@ -22,6 +22,7 @@ Python側でboost::pythonのライブラリを使うプログラム。
 イメージして、WebSocketを使っている。
 
 現在、pywebsocket-0.7.6を使用中。
+pywork取得後、
 ---------------
 cd "～\pywebsocket-0.7.6\src"
 set PYTHONPATH=.
