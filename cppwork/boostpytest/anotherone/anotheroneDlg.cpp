@@ -32,6 +32,7 @@ CanotheroneDlg::CanotheroneDlg(CWnd* pParent /*=NULL*/)
   , m_pModelAPI( NULL )
   , m_pCalcAPI( NULL )
   , m_sdata( NULL )
+  , m_strEdit(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -43,7 +44,8 @@ CanotheroneDlg::~CanotheroneDlg()
 
 void CanotheroneDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDialog::DoDataExchange(pDX);
+  CDialog::DoDataExchange(pDX);
+  DDX_Text(pDX, IDC_EDIT1, m_strEdit);
 }
 
 void CanotheroneDlg::disposeAllCalcObjects()
@@ -58,6 +60,15 @@ void CanotheroneDlg::disposeAllCalcObjects()
     delete m_pCalcAPI;
     m_pCalcAPI = NULL;
   }
+
+  // ミューテックスオブジェクト破棄
+  if ( m_pMutex ){
+    delete m_pMutex;
+    m_pMutex = NULL;
+  }
+
+  UnmapViewOfFile(m_pMappingView);
+	CloseHandle(m_hMapping);
 }
 
 BEGIN_MESSAGE_MAP(CanotheroneDlg, CDialog)
@@ -73,6 +84,7 @@ BEGIN_MESSAGE_MAP(CanotheroneDlg, CDialog)
  	ON_REGISTERED_MESSAGE(wmComPostMsgNotify, OnPostMessageNotify)
   ON_REGISTERED_MESSAGE(wmCalcStartNotify, OnCalcStart)
 	//}}AFX_MSG_MAP
+  ON_BN_CLICKED(IDC_BUTTON1, &CanotheroneDlg::OnBnClickedButton1)
 END_MESSAGE_MAP()
 
 
@@ -98,18 +110,22 @@ BOOL CanotheroneDlg::OnInitDialog()
 	// TODO: 初期化をここに追加します。
 	// メモリマップドファイルの生成
 	m_hMapping = ::CreateFileMapping(
+#ifdef _X64
+    INVALID_HANDLE_VALUE, //(HANDLE)0x00000000ffffffff,
+#else
 		(HANDLE)0xffffffff,     // 共有メモリの場合は0xffffffffを指定
+#endif
 		NULL,                   // セキュリティ属性。NULLでよい
 		PAGE_READWRITE,         // プロテクト属性を読み書き可能に指定
 		0,                      // ファイルサイズの上位32ビット
 		1024,                   // ファイルサイズの下位32ビット
-		_T("SharedMemory") );   // メモリマップドファイルの名前
+		_T("memory") );   // メモリマップドファイルの名前
 
 	// プロセス内のアドレス空間にファイルのビューをマップ
-	//m_pMappingView = ::MapViewOfFile(m_hMapping, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(SharedData*));
+	m_pMappingView = ::MapViewOfFile(m_hMapping, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(SharedData*));
   //m_sdata = new SharedData();
-  LPVOID pMappingView = ::MapViewOfFile(m_hMapping, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(SharedData*));
-	m_sdata = reinterpret_cast<SharedData*>( pMappingView );
+  //LPVOID pMappingView = ::MapViewOfFile(m_hMapping, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(SharedData*));
+	m_sdata = reinterpret_cast<SharedData*>( m_pMappingView );
 
 	// ミューテックスオブジェクトの生成
 	m_pMutex = new CMutex(FALSE, "UKFileMappingTest_Mutex");
@@ -267,11 +283,17 @@ LRESULT CanotheroneDlg::checkDoingStatus( int nType,  WPARAM wParam, LPARAM lPar
   UpdateData(FALSE);
 
   //m_sdata->m_vecstrStatus.push_back(strStatus);
-  m_sdata->m_strStatus = strStatus;
+  //const unsigned int dataSize = strStatus.GetLength();
+  //char* buf = new char[dataSize+1];
+  //strcpy( buf, strStatus );
+  //char buf[256];
+  strcpy(m_sdata->m_mylineNo, static_cast<LPCTSTR>(strStatus));
+
+  //m_sdata->m_mylineNo = buf;
 
   // ★共有メモリへ書き込む。このときミューテックスオブジェクトを
 	// 使用して同期処理をおこなう
-	m_pMutex->Lock(INFINITE);
+	m_pMutex->Lock(0x00000000ffffffff);
 	memcpy(m_pMappingView, m_sdata, sizeof(SharedData));
 	m_pMutex->Unlock();
 
@@ -389,4 +411,23 @@ BOOL CanotheroneDlg::DoCalculation()
   int nRtn = m_pCalcAPI->setProcessSheetCalcExec( strCalcKey );
 
   return TRUE;
+}
+
+void CanotheroneDlg::OnBnClickedButton1()
+{
+  UpdateData(TRUE);
+
+  //m_sdata->m_strStatus = m_strEdit;
+  //const unsigned int dataSize = m_strEdit.GetLength();
+  //char* buf = new char[dataSize+1];
+  strcpy( m_sdata->m_mylineNo, static_cast<LPCTSTR>(m_strEdit) );
+  //m_sdata->m_mylineNo = buf;
+
+  // ★共有メモリへ書き込む。このときミューテックスオブジェクトを
+  // 使用して同期処理をおこなう
+  m_pMutex->Lock(0x00000000ffffffff/*INFINITE*/);
+  memcpy(m_pMappingView, m_sdata, sizeof(SharedData));
+  m_pMutex->Unlock();
+
+  TRACE(_T("memory : %s"), m_strEdit);
 }

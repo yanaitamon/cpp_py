@@ -81,6 +81,8 @@ BEGIN
     PUSHBUTTON      "キャンセル",IDCANCEL,263,25,50,16
     CTEXT           "TODO: ダイアログのコントロールをここに配置",IDC_STATIC,10,96,300,8
     LTEXT           "スタティック",IDC_STATIC1,26,25,192,8
+    PUSHBUTTON      "Button1",IDC_BUTTON1,263,51,50,14
+    EDITTEXT        IDC_EDIT1,26,45,128,14,ES_AUTOHSCROLL
 END
 
 

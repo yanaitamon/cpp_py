@@ -14,8 +14,8 @@ typedef struct SharedData
   char m_mylineNo[256];
   char m_url[256];
   int m_Value;
-  std::vector<CString> m_vecstrStatus;
-  CString m_strStatus;
+  //std::vector<CString> m_vecstrStatus;
+  //CString m_strStatus;
 } SHARED_DATA;
 
 // CanotheroneDlg ダイアログ
@@ -70,6 +70,7 @@ protected:
 	void *m_pMappingView; // ファイルのビューへのポインタ
 	CMutex *m_pMutex;     // ミューテックスオブジェクト
   SharedData* m_sdata;  // テスト用構造体
+  CString m_strEdit;
 
 public:
   BOOL DoCalculation();
@@ -95,4 +96,5 @@ public:
     //CString str1( str.c_str() );
     strTargetTemplate = str;
   }
+  afx_msg void OnBnClickedButton1();
 };
