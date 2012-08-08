@@ -106,8 +106,8 @@ typedef struct SharedData
   char m_mylineNo[256];
   char m_url[256];
   int m_Value;
-  std::vector<CString> m_vecstrStatus;
-  CString m_strStatus;
+  //std::vector<CString> m_vecstrStatus;
+  //CString m_strStatus;
 } SHARED_DATA;
 
 // ハンドルウィンドウ取得
@@ -458,6 +458,8 @@ int DoCommand( LPCTSTR lpszCmdLine, bool bIsHide /*= false*/ )
       return -1 ;
     } else {
 
+      // 切り離してみる
+      /*
       if( bIsHide ) {
         // 終了まで待つ間、画面の再描画のみ行う
         // :V7.1:[ 2011.02.21 M.Su "Mantis-0003451: 使用許諾契約書ウィンドウを閉じると、他のウィンドウが表示する" への対応
@@ -476,6 +478,7 @@ int DoCommand( LPCTSTR lpszCmdLine, bool bIsHide /*= false*/ )
       } else {
         while ( WaitForSingleObject( ProcInfo.hProcess, INFINITE ) != WAIT_OBJECT_0 );
       }
+      */
    
       CloseHandle( ProcInfo.hThread ) ;
     
@@ -499,27 +502,27 @@ public:
   // コンストラクタでメモリマップドファイルを作成する
   DlgCaller()
   {
-    // メモリマップドファイルの作成、確保
-    hMapFile = ::CreateFileMapping(
-                INVALID_HANDLE_VALUE,
-                NULL,
-                PAGE_READWRITE,
-                0,
-                DATA_SIZE,
-                MAP_FILENAME);
+    //// メモリマップドファイルの作成、確保
+    //hMapFile = ::CreateFileMapping(
+    //            INVALID_HANDLE_VALUE,
+    //            NULL,
+    //            PAGE_READWRITE,
+    //            0,
+    //            DATA_SIZE,
+    //            MAP_FILENAME);
 
-    BOOL bExists = (GetLastError() == ERROR_ALREADY_EXISTS);
-    lpMem = ::MapViewOfFile(hMapFile, FILE_MAP_ALL_ACCESS, 0, 0, DATA_SIZE);
-    if (!bExists)
-        ZeroMemory(lpMem, DATA_SIZE);
+    //BOOL bExists = (GetLastError() == ERROR_ALREADY_EXISTS);
+    //lpMem = ::MapViewOfFile(hMapFile, FILE_MAP_ALL_ACCESS, 0, 0, DATA_SIZE);
+    //if (!bExists)
+    //    ZeroMemory(lpMem, DATA_SIZE);
   };
 
   // コンストラクタでメモリマップドファイルを破棄する
   ~DlgCaller()
   {
-    // メモリマップドファイルの解放
-    UnmapViewOfFile(lpMem);
-    CloseHandle(hMapFile);
+    //// メモリマップドファイルの解放
+    //UnmapViewOfFile(lpMem);
+    //CloseHandle(hMapFile);
   }
 
   BOOL DoCalculation(std::wstring str, std::wstring str2,
@@ -539,18 +542,53 @@ public:
     return TRUE;
   }
 
+  //std::wstring getCalcStatus();
+};
+
+
+class MemoryMapper {
+protected:
+public:
+  // コンストラクタでメモリマップドファイルを作成する
+  MemoryMapper()
+  {
+    // メモリマップドファイルの作成、確保
+    hMapFile = ::CreateFileMapping(
+                INVALID_HANDLE_VALUE,
+                NULL,
+                PAGE_READWRITE,
+                0,
+                DATA_SIZE,
+                MAP_FILENAME);
+
+    BOOL bExists = (GetLastError() == ERROR_ALREADY_EXISTS);
+    lpMem = ::MapViewOfFile(hMapFile, FILE_MAP_ALL_ACCESS, 0, 0, DATA_SIZE);
+    if (!bExists)
+        ZeroMemory(lpMem, DATA_SIZE);
+  };
+
+  // コンストラクタでメモリマップドファイルを破棄する
+  ~MemoryMapper()
+  {
+    // メモリマップドファイルの解放
+    UnmapViewOfFile(lpMem);
+    CloseHandle(hMapFile);
+  }
+
   std::wstring getCalcStatus();
 };
 
 // ステータスを返す
-std::wstring DlgCaller::getCalcStatus()
+std::wstring MemoryMapper::getCalcStatus()
 {
   wstring retStr = L"failed.";
 
   SharedData* data = static_cast<SharedData*>(lpMem);
 
   if(NULL != data){
-    //const unsigned int dataSize = data->m_strStatus.GetLength();
+    //CString strTemp( data->m_mylineNo );
+    //AfxMessageBox( strTemp );
+
     const unsigned int dataSize = 256;
     LPCTSTR str2;
     if(NULL != &data->m_mylineNo){
@@ -636,11 +674,15 @@ BOOST_PYTHON_MODULE( boostpytest )
 
   class_<DlgCaller>("DlgCaller")
     .def( "DoCalculation", &DlgCaller::DoCalculation )
-    .def( "getCalcStatus", &DlgCaller::getCalcStatus )
+    //.def( "getCalcStatus", &DlgCaller::getCalcStatus )
     //.def( "get", &DlgCaller::setModelPath )
     //.def( "get", &DlgCaller::setProcName )
     //.def( "get", &DlgCaller::setOriginName )
     //.def( "get", &DlgCaller::setSheetPath )
+    ;
+
+  class_<MemoryMapper>("MemoryMapper")
+    .def( "getCalcStatus", &MemoryMapper::getCalcStatus )
     ;
 
   // C++のadd_hello関数を、greetという名前でpython用に公開

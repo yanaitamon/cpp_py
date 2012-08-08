@@ -297,6 +297,9 @@ LRESULT CanotheroneDlg::checkDoingStatus( int nType,  WPARAM wParam, LPARAM lPar
 	memcpy(m_pMappingView, m_sdata, sizeof(SharedData));
 	m_pMutex->Unlock();
 
+  if ( 0 == strStatus.Compare( _T("Finished") ) )
+    EndDialog(IDOK);
+
   return lRet;
 }
 
