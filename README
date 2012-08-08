@@ -1,6 +1,6 @@
 このリポジトリの説明
 CTシステムのWeb API化をしたい。
-C++のデスクトップアプリケーションをAPI化。
+C++のデスクトップアプリケーションにAPIを実装。
 PythonでWebからPythonライブラリにアクセスするところを試している。
 C++との連携部分はboost::pythonを用いた。
 クライアント側との非同期な通信をしたいのでpywebsocketも試している。
@@ -31,3 +31,5 @@ python mod_pywebsocket/standalone.py -p 8800 -d example
 で、ローカルホスト8800番で簡易サーバ起動。
 
 console.html or console2.htmlを通してxxx_wsh.pyファイルの動きを確かめられる。
+bstpy2_wsh.pyを呼び出すことで非同期の演算とステータス取得が確かめられる。
+
