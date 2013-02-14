@@ -1,8 +1,7 @@
 このリポジトリの説明
-CTシステムのWeb API化をしたい。
-C++のデスクトップアプリケーションにAPIを実装。
-PythonでWebからPythonライブラリにアクセスするところを試している。
-C++との連携部分はboost::pythonを用いた。
+VC++で作られたデスクトップアプリケーションのWeb API化を試している。
+PythonでWebからboost::pythonのPythonライブラリにアクセス。
+boost 1.44.0
 クライアント側との非同期な通信をしたいのでpywebsocketも試している。
 
 cppwork:
