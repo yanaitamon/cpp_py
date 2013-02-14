@@ -1,0 +1,5 @@
+import option ;
+using msvc : 8.0 ;
+option.set keep-going : false ;
+using python : 2.7 : C:\\python27 ;
+libraries = --with-python ;

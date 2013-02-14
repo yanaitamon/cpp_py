@@ -1,0 +1,11 @@
+【参考】
+http://www.open-force.info/index.php/blog/show/l/101
+https://sites.google.com/site/boostjp/howtobuild
+
+【コマンドライン】
+Windows 7 x64
+使用したコマンドは以下。
+C:\boost_1.44.0\lib にライブラリを出力。
+C:\boost_1.44.0\include\boost-1_44\boost にヘッダーを移す。
+bjam install --prefix=C:\boost_1.44.0 --build-dir=. --toolset=msvc-8.0 --build-type=complete --with-python stage threading=multi address-model=64
+
